@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./docker/app
+    ports:
+      - "80:80"
+      - "5173:5173"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+
+  db:
+    container_name: rms-db
+    build:
+      context: ./docker/db
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-local:/var/lib/mysql
+      - ./docker/db/sql:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql-local:
